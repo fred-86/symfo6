@@ -62,8 +62,8 @@ class AppFixtures extends Fixture
          for ($i = 0; $i < 50; $i++) {
              $ingredient = new Ingredient();
              $ingredient->setName($this->faker->word())
-                 ->setPrice(mt_rand(0, 100));
-                //  ->setUser($users[mt_rand(0, count($users) - 1)]);
+                 ->setPrice(mt_rand(0, 100))
+                 ->setUser($users[mt_rand(0, count($users) - 1)]);
 
              $ingredients[] = $ingredient;
              $manager->persist($ingredient);
@@ -79,9 +79,9 @@ class AppFixtures extends Fixture
                 ->setDifficulty(mt_rand(0, 1) == 1 ? mt_rand(1, 5) : null)
                 ->setDescription($this->faker->text(300))
                 ->setPrice(mt_rand(0, 1) == 1 ? mt_rand(1, 1000) : null)
-                ->setIsFavorite(mt_rand(0, 1) == 1 ? true : false);
-                // ->setIsPublic(mt_rand(0, 1) == 1 ? true : false);
-                // ->setUser($users[mt_rand(0, count($users) - 1)]);
+                ->setIsFavorite(mt_rand(0, 1) == 1 ? true : false)
+                ->setIsPublic(mt_rand(0, 1) == 1 ? true : false)
+                ->setUser($users[mt_rand(0, count($users) - 1)]);
 
             for ($k = 0; $k < mt_rand(5, 15); $k++) {
                 $recipe->addIngredient($ingredients[mt_rand(0, count($ingredients) - 1)]);
@@ -91,7 +91,32 @@ class AppFixtures extends Fixture
             $manager->persist($recipe);
         }
 
- 
+        // Marks
+        foreach ($recipes as $recipe) {
+            for ($i = 0; $i < mt_rand(0, 4); $i++) {
+                $mark = new Mark();
+                $mark->setMark(mt_rand(1, 5))
+                    ->setUser($users[mt_rand(0, count($users) - 1)])
+                    ->setRecipe($recipe);
+
+                $manager->persist($mark);
+            }
+
+
+        }
+
+
+        // Contact
+        for ($i = 0; $i < 5; $i++) {
+            $contact = new Contact();
+            $contact->setFullName($this->faker->name())
+                ->setEmail($this->faker->email())
+                ->setSubject('Demande n°' . ($i + 1))
+                ->setMessage($this->faker->text());
+
+            $manager->persist($contact);
+        }
+
 
         $manager->flush();
     }
