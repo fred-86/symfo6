@@ -2,6 +2,7 @@
 
 namespace App\EventSubscriber;
 
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class KernelSubscriber implements EventSubscriberInterface {
@@ -12,4 +13,11 @@ class KernelSubscriber implements EventSubscriberInterface {
           return [
             RequestEvent::class => 'onKernelRequest' ];
     }
+
+    public function onKernelRequest(RequestEvent $event): void
+    {
+        if (!$event->isMainRequest()) {
+            // don't do anything if it's not the main request
+            return;
+        }
 }
